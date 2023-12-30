@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://dnffdcvda7pi"]
+
+[ext_resource type="Texture2D" uid="uid://b31cjjlbmfl82" path="res://PinkJump.png" id="1_kj5ix"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3cpdc"]
+radius = 32.0
+height = 80.0
+
+[node name="CharacterBody2D2" type="CharacterBody2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(3, 3)
+texture = ExtResource("1_kj5ix")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 8)
+shape = SubResource("CapsuleShape2D_3cpdc")
