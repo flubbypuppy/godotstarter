@@ -17,8 +17,8 @@ func _down_helper():
 		return
 	else:
 		is_crouched = true
-		sprite_2d.rotation_degrees = deg_to_rad(-90)
-		collision_2d.rotation_degrees = deg_to_rad(-90)
+		#sprite_2d.rotation_degrees = deg_to_rad(-90)
+		#collision_2d.rotation_degrees = deg_to_rad(-90)
 		sprite_2d.scale.y *= 0.5
 		collision_2d.scale.y *= 0.5
 
@@ -28,14 +28,14 @@ func _up_helper():
 	if not is_crouched:
 		return
 	is_crouched = false
-	sprite_2d.rotation_degrees = deg_to_rad(90)
-	collision_2d.rotation_degrees = deg_to_rad(90)
+	#sprite_2d.rotation_degrees = deg_to_rad(90)
+	#collision_2d.rotation_degrees = deg_to_rad(90)
 	sprite_2d.scale.y *= 2
 	collision_2d.scale.y *= 2
 
 func _physics_process(delta):
 	# Animations
-	if (velocity.x > 1 || velocity.x < -1):
+	if not b_down and (velocity.x > 1 || velocity.x < -1):
 		sprite_2d.animation = "running"
 		
 	# Crouch Slide/Duck or Slam
@@ -80,7 +80,8 @@ func _physics_process(delta):
 	else:
 		velocity.x = move_toward(velocity.x, 0, 10) if not is_down else move_toward(velocity.x, 0, 5)
 
+	if direction !=0: 
+		sprite_2d.flip_h = (direction == -1)
+	
 	move_and_slide()
 	
-	var isLeft = velocity.x < 0
-	sprite_2d.flip_h = isLeft
