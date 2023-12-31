@@ -9,18 +9,29 @@ const SLAM_VELOCITY = 1000
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+var is_crouched = false
+var b_down= false
 
 func _down_helper():
-	sprite_2d.rotation_degrees = deg_to_rad(-90)
-	collision_2d.rotation_degrees = deg_to_rad(-90)
-	sprite_2d.scale.x *= 0.5
-	collision_2d.scale.x *= 0.5
+	if is_crouched:
+		return
+	else:
+		is_crouched = true
+		sprite_2d.rotation_degrees = deg_to_rad(-90)
+		collision_2d.rotation_degrees = deg_to_rad(-90)
+		sprite_2d.scale.y *= 0.5
+		collision_2d.scale.y *= 0.5
+
+		
 	
 func _up_helper():
+	if not is_crouched:
+		return
+	is_crouched = false
 	sprite_2d.rotation_degrees = deg_to_rad(90)
 	collision_2d.rotation_degrees = deg_to_rad(90)
-	sprite_2d.scale.x *= 2
-	collision_2d.scale.x *= 2
+	sprite_2d.scale.y *= 2
+	collision_2d.scale.y *= 2
 
 func _physics_process(delta):
 	# Animations
@@ -28,21 +39,35 @@ func _physics_process(delta):
 		sprite_2d.animation = "running"
 		
 	# Crouch Slide/Duck or Slam
-	var is_down = Input.is_key_pressed(KEY_DOWN)
-	var is_down_released = Input.is_action_just_released("ui_down")
-	if is_down:
-		_down_helper()
-	if is_down_released:
-		_up_helper()
+	#var is_down = Input.is_key_pressed(KEY_DOWN)
+	#var is_down_released = Input.is_action_just_released("ui_down")
 	
 	# Add the gravity.
 	if not is_on_floor():
+		print("not on floor")
 		velocity.y += gravity * delta
 		sprite_2d.animation = "jumping"
-		if is_down:
+		if not is_crouched and Input.is_key_pressed(KEY_DOWN):
+			print("down b")
+			b_down = true
 			velocity.y = SLAM_VELOCITY
 			sprite_2d.animation = "slamming"
 
+	var is_down = Input.is_key_pressed(KEY_DOWN)
+	var is_down_released = Input.is_action_just_released("ui_down")
+
+	if is_down and not b_down:
+		print("crouch")
+		_down_helper()
+		velocity.y += gravity * delta
+	if is_down_released and not b_down:
+		print("release crouch")
+		_up_helper()
+	if is_down_released:
+		print("release down b")
+		b_down = false
+		sprite_2d.animation = "running"
+		
 	# Handle jump.
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
