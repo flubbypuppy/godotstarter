@@ -22,7 +22,6 @@ func _down_helper():
 		sprite_2d.scale.y *= 0.5
 		collision_2d.scale.y *= 0.5
 
-		
 	
 func _up_helper():
 	if not is_crouched:
@@ -37,7 +36,8 @@ func _physics_process(delta):
 	# Animations
 	if not b_down and (velocity.x > 1 || velocity.x < -1):
 		sprite_2d.animation = "running"
-		
+	elif velocity.x == 0:
+		sprite_2d.animation = "default"
 	# Crouch Slide/Duck or Slam
 	#var is_down = Input.is_key_pressed(KEY_DOWN)
 	#var is_down_released = Input.is_action_just_released("ui_down")
@@ -66,7 +66,7 @@ func _physics_process(delta):
 	if is_down_released:
 		print("release down b")
 		b_down = false
-		sprite_2d.animation = "running"
+		sprite_2d.animation = "default"
 		
 	# Handle jump.
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
@@ -75,10 +75,10 @@ func _physics_process(delta):
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var direction = Input.get_axis("ui_left", "ui_right")
-	if direction:
+	if direction and not b_down:
 		velocity.x = direction * SPEED
 	else:
-		velocity.x = move_toward(velocity.x, 0, 10) if not is_down else move_toward(velocity.x, 0, 5)
+		velocity.x = move_toward(velocity.x, 0, 5) if is_crouched else move_toward(velocity.x, 0, 10)
 
 	if direction !=0: 
 		sprite_2d.flip_h = (direction == -1)
