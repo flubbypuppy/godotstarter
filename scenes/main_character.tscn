@@ -1,9 +1,10 @@
-[gd_scene load_steps=30 format=3 uid="uid://cqfso8ejyc80h"]
+[gd_scene load_steps=31 format=3 uid="uid://cqfso8ejyc80h"]
 
 [ext_resource type="Script" path="res://scenes/main_character.gd" id="1_uvfgw"]
 [ext_resource type="Texture2D" uid="uid://c7fi2vwouwc1m" path="res://Jump (32x32).png" id="1_v4na8"]
 [ext_resource type="Texture2D" uid="uid://dkxlwwjipih7s" path="res://Idle (32x32).png" id="2_to8mq"]
 [ext_resource type="Texture2D" uid="uid://ct358y3s5gfpx" path="res://Run (32x32).png" id="4_lbx0d"]
+[ext_resource type="Texture2D" uid="uid://i3vdey8sw6k7" path="res://Slam.png" id="5_7un8b"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_myxnh"]
 atlas = ExtResource("2_to8mq")
@@ -185,6 +186,14 @@ animations = [{
 "loop": true,
 "name": &"running",
 "speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_7un8b")
+}],
+"loop": true,
+"name": &"slamming",
+"speed": 5.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8dofp"]
@@ -199,6 +208,7 @@ texture_filter = 1
 position = Vector2(0, -1.90735e-06)
 sprite_frames = SubResource("SpriteFrames_7nqo6")
 autoplay = "default"
+frame_progress = 0.404919
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 2.67187)
